@@ -59,6 +59,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build Container image
-        run: docker build -t ${{ secrets.DOCKERHUB_REPO }}:latest .
+        run: docker build -t ${{ secrets.DOCKERHUB_REPO }}:latest ./../../
       - name: Publish Docker image
         run: docker push ${{ secrets.DOCKER_REPO }}
