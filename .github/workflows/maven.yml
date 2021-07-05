@@ -23,6 +23,8 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
+    steps:
+      - uses: actions/checkout@v2
   build_and_test:
     runs-on: ubuntu-latest
     steps:
