@@ -1,0 +1,62 @@
+version: '2'
+services:
+  circular-cup-backend :
+    container_name: circular-cup-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: circular-cup-backend
+    depends_on:
+      - mongodb
+      - mysqldb
+      - redis
+    ports:
+      - 8080:8080
+    environment:
+      WAIT_HOSTS: mongodb:27017
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/demo?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CACHE_TYPE: redis
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+    networks:
+      - circular-cup-network
+
+  redis:
+    image: redis:alpine
+    hostname: redis
+    restart: always
+    volumes:
+      - ./data/circular_cup_redis_data:/data
+    ports:
+      -  127.0.0.1:6379:6379
+    networks:
+      - circular-cup-network
+
+  mongodb:
+    image: mongo:3.6
+    restart: always
+    volumes:
+      - ./data/circular_cup_mongodb_data:/data/db
+    ports:
+      - 127.0.0.1:27017:27017
+    networks:
+      - circular-cup-network
+
+  mysqldb:
+    image: mysql:8
+    restart: always
+    volumes:
+      - ./data/circular_cup_mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: demo
+    ports:
+      - 127.0.0.1:3306:3306
+    networks:
+      - circular-cup-network
+
+networks:
+  circular-cup-network:
+    driver: bridge
