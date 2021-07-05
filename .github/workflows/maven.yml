@@ -10,31 +10,22 @@ on:
     branches: [ master ]
 
 jobs:
-  container-job:
-    # Containers must run in Linux based operating systems
-    runs-on: ubuntu-latest
-    # Docker Hub image that `container-job` executes in
-    container: node:10.18-jessie
-
-    # Service containers to run with `container-job`
-    services:
-      # Label used to access the service container
-      redis:
-        # Docker Hub image
-        image: redis
-        # Set health checks to wait until redis has started
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          # Maps port 6379 on service container to the host
-          - 6379:6379
-
   build_and_test:
 
     runs-on: ubuntu-latest
+    container: node:10.18-jessie
+      services:
+        redis:
+          image: redis
+          options: >-
+            --health-cmd "redis-cli ping"
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+          ports:
+            # Maps port 6379 on service container to the host
+            - 6379:6379
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
