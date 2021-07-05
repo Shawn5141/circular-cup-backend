@@ -12,6 +12,7 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
+    container: node:10.18-jessie
     services:
       redis:
         image: redis:alpine
