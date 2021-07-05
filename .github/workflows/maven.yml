@@ -11,21 +11,17 @@ on:
 
 jobs:
   build_and_test:
-
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
-      services:
-        redis:
-          image: redis
-          options: >-
-            --health-cmd "redis-cli ping"
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
-          ports:
-            # Maps port 6379 on service container to the host
-            - 6379:6379
-
+    services:
+      redis:
+        image: redis:alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
