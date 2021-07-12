@@ -1,0 +1,1 @@
+constants - constant defined class
